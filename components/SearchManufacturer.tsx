@@ -10,9 +10,18 @@ const SearchManufacturer = ({
   setManufacturer,
 }: SearchManufacturerProps) => {
   const [query, setquery] = useState("");
+  const filteredManufacturers =
+    query === ""
+      ? manufacturers
+      : manufacturers.filter((item) =>
+          item
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(query.toLowerCase().replace(/\s+/g, ""))
+        );
   return (
     <div className="search-manufacturer">
-      <Combobox>
+      <Combobox value={manufacturer} onChange={setManufacturer}>
         <div className="relative w-full">
           <Combobox.Button className="absolute top-[14px]">
             <Image
@@ -26,8 +35,8 @@ const SearchManufacturer = ({
           <Combobox.Input
             className="search-manufacturer__input"
             placeholder="Volkswagen"
-            displayValue={(manufacturer: string) => manufacturer}
-            onChange={(e) => setquery(e.target.value)}
+            displayValue={(item: string) => manufacturer}
+            onChange={(event) => setquery(event.target.value)}
           />
 
           <Transition
@@ -37,7 +46,33 @@ const SearchManufacturer = ({
             leaveTo="opacity-0"
             afterLeave={() => setquery("")}
           >
-            <Combobox.Options>x z</Combobox.Options>
+            <Combobox.Options>
+              {filteredManufacturers.map((item) => (
+                <Combobox.Option
+                  key={item}
+                  className={({ active }) =>
+                    `relative search-manufacturer__option ${
+                      active ? "bg-primary-blue text-white" : "text-gray-900"
+                    }`
+                  }
+                  value={item}
+                >
+                  {({ selected, active }) => (
+                      <>
+                        <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
+                          {item}
+                        </span>
+
+                        {/* Show an active blue background color if the option is selected */}
+                        {selected ? (
+                          <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active? "text-white": "text-pribg-primary-purple"}`}
+                          ></span>
+                        ) : null}
+                      </>
+                    )}
+                </Combobox.Option>
+              ))}
+            </Combobox.Options>
           </Transition>
         </div>
       </Combobox>
