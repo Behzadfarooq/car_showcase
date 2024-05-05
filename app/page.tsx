@@ -1,5 +1,7 @@
+
 import { fuels, yearsOfProduction } from "@/Constants";
 import { CarCard, CustomFilter, Hero, SearchBar, ShowMore } from "@/components";
+import { HomeProps } from "@/types";
 import { fetchCars } from "@/utils";
 import Image from "next/image";
 
